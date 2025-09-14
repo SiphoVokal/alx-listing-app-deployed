@@ -24,10 +24,11 @@ export default function BookingSummary({ property}: BookingSummaryProps) {
   const total = searchParams.get("total") || "0";
 
   return (
-    <div className="flex flex-col min-h-screen  mx-auto w-[55%] mt-12">
-      <div className="flex-row">
+    <div className="flex flex-col min-h-screen  mx-auto w-[95%] sm:w-[65%] mt-12">
+      <div className="">
         {/* Property Summary */}
         <div className="relative w-full h-56 md:h-72">
+          
           <Image
             src={image}
             alt={title}
@@ -35,10 +36,10 @@ export default function BookingSummary({ property}: BookingSummaryProps) {
             className="object-cover rounded-2xl"
           />
         </div>
-
-        <h1 className="text-xl font-semibold">{title}</h1>
-        <div className="flex items-center text-sm text-gray-600">
-          <FiStar className="text-yellow-500 mr-1" />
+        
+        <h1 className="text-xl font-semibold mt-2 px-2">{title}</h1>
+        <div className="flex text-sm text-gray-600">
+          <FiStar className="text-yellow-500 mr-1 ml-2" />
           <span>{rating}</span>
         </div>
       </div>
@@ -73,7 +74,7 @@ export default function BookingSummary({ property}: BookingSummaryProps) {
       <div className="p-4">
         <button
           onClick={handlePayment}
-          className="w-full bg-blue-600 text-white py-3 rounded-xl text-lg font-medium hover:bg-blue-700"
+          className="w-full bg-green-600 text-white py-3 rounded-xl text-lg font-medium hover:bg-green-700"
         >
           Pay Now
         </button>

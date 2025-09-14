@@ -27,7 +27,8 @@ export default function Header() {
 
       <header className="flex items-center justify-between p-4 shadow md:px-8">
         {/* Logo */}
-        <div className="flex items-center">
+        <Link href={"/"}>
+          <div className="flex items-center">
             <Image 
               src="/images/logo.png"
               className="hidden lg:block"
@@ -35,8 +36,8 @@ export default function Header() {
               width={40}
               height={20}
             />
-        </div>
-
+          </div>
+        </Link>
         <div className="flex items-center justify-between flex-1 lg:hidden space-x-4">
         {/* Search bar */}
         <div className="flex-1 flex items-center bg-white border rounded-full shadow p-2">
