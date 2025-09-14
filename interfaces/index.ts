@@ -73,3 +73,19 @@ export interface BookingDetails {
   totalNights: number;
   startDate: string;
 }
+
+export interface BookingSummaryProps {
+  property: {
+    id: string;
+    title: string;
+    description: string;
+    image: string;
+    rating: number;
+    price: number;
+  };
+  booking: {
+    startDate: string;
+    endDate: string;
+    total: number;
+  };
+}

@@ -1,136 +1,83 @@
+"use client";
 
-import axios from "axios";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { FiStar } from "react-icons/fi";
+import { Calendar } from "lucide-react";
+import { BookingSummaryProps } from "@/interfaces";
+import { useSearchParams } from "next/navigation";
 
-type ConfirmationResponse = {
-  bookingId: string;
-  message: string;
-};
 
-export default function BookingForm() {
 
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    cardNumber: "",
-    expirationDate: "",
-    cvv: "",
-    billingAddress: "",
-  });
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+export default function BookingSummary({ property, booking }: BookingSummaryProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const handlePayment = () => {
+    router.push(`/payment/${property.id}`);
   };
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [confirmation, setConfirmation] = useState<ConfirmationResponse | null>(null);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await axios.post<ConfirmationResponse>("/api/bookings", formData);
-       setConfirmation(response.data);
-    } catch (error) {
-      console.error("Booking error:", error);
-      setError("Failed to submit booking.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const title = searchParams.get("title") || "Property";
+  const image = searchParams.get("image") || "/placeholder.jpg";
+  const rating = searchParams.get("rating");
+  const startDate = searchParams.get("startDate") || "";
+  const endDate = searchParams.get("endDate") || "";
+  const total = searchParams.get("total") || "0";
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
-      <input
-        type="text"
-        name="firstName"
-        placeholder="First Name"
-        value={formData.firstName}
-        onChange={handleChange}
-        className="w-full border px-3 py-2 rounded"
-      />
-      <input
-        type="text"
-        name="lastName"
-        placeholder="Last Name"
-        value={formData.lastName}
-        onChange={handleChange}
-        className="w-full border px-3 py-2 rounded"
-      />
-      <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        value={formData.email}
-        onChange={handleChange}
-        className="w-full border px-3 py-2 rounded"
-      />
-      <input
-        type="tel"
-        name="phoneNumber"
-        placeholder="Phone Number"
-        value={formData.phoneNumber}
-        onChange={handleChange}
-        className="w-full border px-3 py-2 rounded"
-      />
-      <input
-        type="text"
-        name="cardNumber"
-        placeholder="Card Number"
-        value={formData.cardNumber}
-        onChange={handleChange}
-        className="w-full border px-3 py-2 rounded"
-      />
-      <input
-        type="text"
-        name="expirationDate"
-        placeholder="MM/YY"
-        value={formData.expirationDate}
-        onChange={handleChange}
-        className="w-full border px-3 py-2 rounded"
-      />
-      <input
-        type="text"
-        name="cvv"
-        placeholder="CVV"
-        value={formData.cvv}
-        onChange={handleChange}
-        className="w-full border px-3 py-2 rounded"
-      />
-      <textarea
-        name="billingAddress"
-        placeholder="Billing Address"
-        value={formData.billingAddress}
-        onChange={handleChange}
-        className="w-full border px-3 py-2 rounded"
-      />
+    <div className="flex flex-col min-h-screen  mx-auto w-[55%] mt-12">
+      <div className="flex-row">
+        {/* Property Summary */}
+        <div className="relative w-full h-56 md:h-72">
+          <Image
+            src={image}
+            alt={title}
+            fill
+            className="object-cover rounded-2xl"
+          />
+        </div>
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700"
-      >
-        {loading ? "Processing..." : "Confirm & Pay"}
-      </button>
+        <h1 className="text-xl font-semibold">{title}</h1>
+        <div className="flex items-center text-sm text-gray-600">
+          <FiStar className="text-yellow-500 mr-1" />
+          <span>{rating}</span>
+        </div>
+      </div>
+      <div className="flex-1 p-4 space-y-4">
+        {/* Booking Dates */}
+        <div className="mt-4 p-4 bg-white rounded-xl shadow-sm">
+          <h2 className="text-base font-semibold mb-2">Your Booking</h2>
+          <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center space-x-2">
+              <Calendar className="w-4 h-4 text-gray-500" />
+              <span>Check-in</span>
+            </div>
+            <span>{startDate}</span>
+          </div>
+          <div className="flex items-center justify-between text-sm mt-2">
+            <div className="flex items-center space-x-2">
+              <Calendar className="w-4 h-4 text-gray-500" />
+              <span>Check-out</span>
+            </div>
+            <span>{endDate}</span>
+          </div>
+        </div>
 
-      {error && <p className="text-red-500">{error}</p>}
+        {/* Total */}
+        <div className="mt-4 flex justify-between items-center text-lg font-semibold">
+          <span>Total</span>
+          <span>${total}</span>
+        </div>
+      </div>
 
-      {confirmation && (
-      <p className="text-green-600">
-        Booking confirmed! Ref: {confirmation.bookingId}
-      </p>
-      )}
-    </form>
-  );    
+      {/* Sticky Pay Now Button */}
+      <div className="p-4">
+        <button
+          onClick={handlePayment}
+          className="w-full bg-blue-600 text-white py-3 rounded-xl text-lg font-medium hover:bg-blue-700"
+        >
+          Pay Now
+        </button>
+      </div>
+    </div>
+  );
 }

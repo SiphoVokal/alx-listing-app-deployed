@@ -1,7 +1,7 @@
 const BookingForm = () => (
-  <div className="bg-white p-6 shadow-md rounded-lg">
+  <div className="bg-white p-6 shadow-md">
     <h2 className="text-xl font-semibold">Contact Details</h2>
-    <form className="mt-4">
+    <form className="mt-12 ">
       {/* Contact Information */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
