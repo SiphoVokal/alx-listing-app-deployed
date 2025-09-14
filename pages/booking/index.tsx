@@ -9,7 +9,7 @@ import { useSearchParams } from "next/navigation";
 
 
 
-export default function BookingSummary({ property, booking }: BookingSummaryProps) {
+export default function BookingSummary({ property}: BookingSummaryProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const handlePayment = () => {
